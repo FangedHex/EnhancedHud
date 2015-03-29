@@ -1,5 +1,8 @@
+-- Variables globales pour l'HUD
 local PulpHUD_Var_Enable = CreateClientConVar( "pulphud_enable", "1", true, false )
-local PulpHUD_Var_CompassDraw = CreateClientConVar( "pulphud_compass", "1", true, false )
+
+-- Variables pour la boussole
+local PulpHUD_Var_CompassDraw = CreateClientConVar( "pulphud_compass_enable", "1", true, false )
 
 surface.CreateFont("HealthFont", {
     font    = "BudgetLabel",
@@ -148,6 +151,7 @@ function PulpHUD_Drawer()
 	draw.RoundedBox( 8, ScrW()-PulpHUD_primaryAnim-offsetX, ScrH()-h-offsetY, w, h, Color(0, 0, 0, (PulpHUD_primaryAnim/w)*180) );
 	draw.DrawText("Primary", "HealthFont", ScrW()-PulpHUD_primaryAnim-offsetX+10, ScrH()-h-offsetY+10, Color(255, 255, 255, (PulpHUD_primaryAnim/w)*255), TEXT_ALIGN_LEFT);
 	draw.DrawText(primary_ammo, "HealthFont2", ScrW()-PulpHUD_primaryAnim-offsetX+80, ScrH()-h-offsetY+15, Color(255, 255, 255, (PulpHUD_primaryAnim/w)*255), TEXT_ALIGN_LEFT);
+	draw.DrawText(total_ammo, "HealthFont", ScrW()-PulpHUD_primaryAnim-offsetX+w-10, ScrH()-offsetY-30, Color(255, 255, 255, (PulpHUD_primaryAnim/w)*255), TEXT_ALIGN_RIGHT);
 	
 	if secondary_ammo > 0 and PulpHUD_secondaryAnim < 50 and PulpHUD_primaryAnim == w then
 		PulpHUD_secondaryAnim=PulpHUD_secondaryAnim+1
@@ -224,7 +228,7 @@ end
 
 function PulpHUD_HideThings( name )
 	if PulpHUD_Var_Enable:GetBool() == false then return; end
-	if(name == "CHudHealth") or (name == "CHudBattery") or (name == "CHudAmmo") then
+	if(name == "CHudHealth") or (name == "CHudBattery") or (name == "CHudAmmo") or (name == "CHudSecondaryAmmo") then
         return false
     end
 end
