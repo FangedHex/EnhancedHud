@@ -1,8 +1,12 @@
 -- Variables globales pour l'HUD
-local PulpHUD_Var_Enable = CreateClientConVar( "pulphud_enable", "1", true, false )
+local PulpHUD_Enable = CreateClientConVar( "pulphud_enable", "1" )
+
+-- Variables pour les notifications
+local PulpHUD_Notification_Enable = CreateClientConVar( "pulphud_notification_enable", "1" ) -- Pas encore implantée :(
+local PulpHUD_Notification_Sound_Enable = CreateClientConVar( "pulphud_notification_sound_enable", "1" )
 
 -- Variables pour la boussole
-local PulpHUD_Var_CompassDraw = CreateClientConVar( "pulphud_compass_enable", "1", true, false )
+local PulpHUD_Var_CompassDraw = CreateClientConVar( "pulphud_compass_enable", "1" )
 
 surface.CreateFont("HealthFont", {
     font    = "BudgetLabel",
@@ -32,7 +36,7 @@ surface.CreateFont("CompassFont", {
 })
 
 function PulpHUD_Drawer()
-	if PulpHUD_Var_Enable:GetBool() == false then return; end
+	if PulpHUD_Enable:GetBool() == false then return; end
 	
 	-- Partie notification
 	for i, data in pairs(PulpHUD_notifs) do
@@ -54,7 +58,9 @@ function PulpHUD_Drawer()
 				}; -- On dessine l'icone
 				
 				if data[9] == false then
-					surface.PlaySound( "garrysmod/content_downloaded.wav" );
+					if PulpHUD_Notification_Sound_Enable:GetBool() then
+						surface.PlaySound( "garrysmod/content_downloaded.wav" );
+					end
 					data[9] = true;
 				end
 			end
@@ -227,7 +233,7 @@ function PulpHUD_addNotification(text)
 end
 
 function PulpHUD_HideThings( name )
-	if PulpHUD_Var_Enable:GetBool() == false then return; end
+	if PulpHUD_Enable:GetBool() == false then return; end
 	if(name == "CHudHealth") or (name == "CHudBattery") or (name == "CHudAmmo") or (name == "CHudSecondaryAmmo") then
         return false
     end
