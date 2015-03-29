@@ -1,0 +1,7 @@
+// Extracted with MulleDK19's GMAD Extractor
+"AddonInfo"
+{
+	"name" "Pulp HUD"
+	"author_name" "Unknown"
+	"info" "I made an hud for gmod and want release it on workshop :P  To see how many players will use it and maybe I gonna update and improve it :D  Nota : It's a simple modification of hl2 basic hud..."
+}
