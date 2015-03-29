@@ -128,10 +128,16 @@ function PulpHUD_Drawer()
 	local total_ammo = -1
 	local primary_ammo = -1
 	local secondary_ammo = -1
-	if ply:Alive() then
-		total_ammo = ply:GetAmmoCount(wep:GetPrimaryAmmoType())
-		primary_ammo = wep:Clip1()
-		secondary_ammo = ply:GetAmmoCount(wep:GetSecondaryAmmoType())
+	if ply:Alive() and wep ~= nil then
+		if wep.GetPrimaryAmmoType ~= nil then
+			total_ammo = ply:GetAmmoCount(wep:GetPrimaryAmmoType())
+		end
+		if wep.Clip1 ~= nil then
+			primary_ammo = wep:Clip1()
+		end
+		if wep.GetSecondaryAmmoType ~= nil then
+			secondary_ammo = ply:GetAmmoCount(wep:GetSecondaryAmmoType())
+		end
 	end
 	
 	if primary_ammo >= 0 and PulpHUD_primaryAnim < w then
@@ -200,18 +206,18 @@ for i=-180,180 do
 end
 
 
-PulpHUD_notifs = {};
+PulpHUD_notifs = {}
 function PulpHUD_addNotification(text)
-	local data = {};
-	data[1] = text; -- texte de la notification
-	data[2] = ScrW(); -- position X
-	data[3] = ScrH()/2; -- position Y
-	data[4] = 0; -- vitesse X
-	data[5] = 0; -- vitesse Y
-	data[6] = 255; -- alpha
-	data[7] = 0; -- vitesse alpha
-	data[8] = 0; -- Timer pour eviter la disparition rapide
-	data[9] = false; -- Est apparue ?
+	local data = {}
+	data[1] = text -- texte de la notification
+	data[2] = ScrW() -- position X
+	data[3] = ScrH()/2 -- position Y
+	data[4] = 0 -- vitesse X
+	data[5] = 0 -- vitesse Y
+	data[6] = 255 -- alpha
+	data[7] = 0 -- vitesse alpha
+	data[8] = 0 -- Timer pour eviter la disparition rapide
+	data[9] = false -- Est apparue ?
 	
 	table.insert( PulpHUD_notifs , data );
 end
