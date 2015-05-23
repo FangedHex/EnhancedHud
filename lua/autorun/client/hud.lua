@@ -112,9 +112,15 @@ function PulpHUD_Drawer()
 	local w = 200
 	local h = 80
 	
+	local pHealth = LocalPlayer():Health()
+	local healthOffset = 80
+	if pHealth <= 0 then
+		pHealth = "DEAD"
+		healthOffset = 70
+	end
 	draw.RoundedBox( 8, offsetX, ScrH()-h-offsetY, w, h, Color(0, 0, 0, 180) );
 	draw.DrawText("Health", "HealthFont", offsetX+10, ScrH()-h-offsetY+10, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT);
-	draw.DrawText(LocalPlayer():Health(), "HealthFont2", offsetX+80, ScrH()-h-offsetY+15, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT);
+	draw.DrawText(pHealth, "HealthFont2", offsetX+healthOffset, ScrH()-h-offsetY+15, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT);
 	
 	if LocalPlayer():Armor() > 0 and PulpHUD_armorAnim < 50 then
 		PulpHUD_armorAnim=PulpHUD_armorAnim+1
