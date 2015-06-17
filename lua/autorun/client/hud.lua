@@ -1,3 +1,5 @@
+if engine.ActiveGamemode() ~= "sandbox" then return; end
+
 -- Variables globales pour l'HUD
 local PulpHUD_Enable = CreateClientConVar( "pulphud_enable", "1" )
 
