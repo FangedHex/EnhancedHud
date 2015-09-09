@@ -1,4 +1,4 @@
-if engine.ActiveGamemode() ~= "sandbox" then return; end
+print("Loading PulpHUD ...")
 
 -- Variables globales pour l'HUD
 local PulpHUD_Enable = CreateClientConVar( "pulphud_enable", "1" )
@@ -39,16 +39,16 @@ surface.CreateFont("CompassFont", {
 
 function PulpHUD_Drawer()
 	if PulpHUD_Enable:GetBool() == false then return; end
-	
+
 	-- Partie notification
 	for i, data in pairs(PulpHUD_notifs) do
 		if data[6] > 0 then
-			surface.SetFont("BudgetLabel");	
+			surface.SetFont("BudgetLabel");
 			local w,h = surface.GetTextSize(data[1]);
 			w = w+32;
-			if data[2] < ScrW() then				
+			if data[2] < ScrW() then
 				draw.RoundedBox( 8, data[2], data[3], w, 20, Color(0, 0, 0, data[6]-75) ); -- On dessine la boite
-				draw.DrawText(data[1], "BudgetLabel", data[2]+24, data[3]+4, Color(255, 255, 255, data[6]), TEXT_ALIGN_LEFT); -- On dessine le texte		
+				draw.DrawText(data[1], "BudgetLabel", data[2]+24, data[3]+4, Color(255, 255, 255, data[6]), TEXT_ALIGN_LEFT); -- On dessine le texte
 				draw.TexturedQuad
 				{
 					texture = surface.GetTextureID("gui/gmod_logo"),
@@ -58,7 +58,7 @@ function PulpHUD_Drawer()
 					w = 24,
 					h = 24
 				}; -- On dessine l'icone
-				
+
 				if data[9] == false then
 					if PulpHUD_Notification_Sound_Enable:GetBool() then
 						surface.PlaySound( "garrysmod/content_downloaded.wav" );
@@ -66,9 +66,9 @@ function PulpHUD_Drawer()
 					data[9] = true;
 				end
 			end
-		
+
 			local canMoveX = true;
-			local canMoveY = true;			
+			local canMoveY = true;
 			local last_notif = PulpHUD_notifs[i-1];
 			if last_notif != nil then
 				if data[3]+data[5] <= last_notif[3]+21 then
@@ -77,19 +77,19 @@ function PulpHUD_Drawer()
 				end
 				if data[3]+data[5] <= last_notif[3]+22 and last_notif[6] > 0 then
 					canMoveY = false;
-					data[5] = 0;			
+					data[5] = 0;
 				end
 			end
-		
+
 			-- Déplacement
 			if canMoveX and data[2] > ScrW()-w then
 				data[4] = data[4]-0.4;
 				data[2] = data[2]+data[4];
-			elseif canMoveY and data[3] > 200 then		
+			elseif canMoveY and data[3] > 200 then
 				data[5] = data[5]-0.4;
 				data[3] = data[3]+data[5];
-			end	
-		
+			end
+
 			-- Disparition en alpha
 			if data[2] <= ScrW()-w and data[3] <= 200 then
 				if data[8] >= 400 then
@@ -103,17 +103,17 @@ function PulpHUD_Drawer()
 					data[8] = data[8]+1;
 				end
 			end
-			
+
 		end
-		
+
 	end -- FIN DE BOUCLE
-	
+
 	-- Partie hud gauche
 	local offsetX = 10
 	local offsetY = 10
 	local w = 200
 	local h = 80
-	
+
 	local pHealth = LocalPlayer():Health()
 	local healthOffset = 80
 	if pHealth <= 0 then
@@ -123,7 +123,7 @@ function PulpHUD_Drawer()
 	draw.RoundedBox( 8, offsetX, ScrH()-h-offsetY, w, h, Color(0, 0, 0, 180) );
 	draw.DrawText("Health", "HealthFont", offsetX+10, ScrH()-h-offsetY+10, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT);
 	draw.DrawText(pHealth, "HealthFont2", offsetX+healthOffset, ScrH()-h-offsetY+15, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT);
-	
+
 	if LocalPlayer():Armor() > 0 and PulpHUD_armorAnim < 50 then
 		PulpHUD_armorAnim=PulpHUD_armorAnim+1
 	elseif LocalPlayer():Armor() == 0 and PulpHUD_armorAnim > 0 then
@@ -132,16 +132,16 @@ function PulpHUD_Drawer()
 	draw.RoundedBox( 8, offsetX+w/2, ScrH()-h-offsetY-PulpHUD_armorAnim, w/2, 40, Color(0, 0, 0, (PulpHUD_armorAnim/50)*180) );
 	draw.DrawText("Armor", "BudgetLabel", offsetX+w/2+10, ScrH()-h-offsetY-PulpHUD_armorAnim+10, Color(255, 255, 255, (PulpHUD_armorAnim/50)*255), TEXT_ALIGN_LEFT);
 	draw.DrawText(LocalPlayer():Armor(), "HealthFont", offsetX+w/2+60, ScrH()-h-offsetY-PulpHUD_armorAnim+10, Color(255, 255, 255, (PulpHUD_armorAnim/50)*255), TEXT_ALIGN_LEFT);
-	
+
 	-- Partie hud droite
 	local offsetX = 10
 	local offsetY = 10
 	local w = 200
 	local h = 80
-	
+
 	local ply = LocalPlayer()
 	local wep = ply:GetActiveWeapon()
-	
+
 	local total_ammo = -1
 	local primary_ammo = -1
 	local secondary_ammo = -1
@@ -156,22 +156,22 @@ function PulpHUD_Drawer()
 			secondary_ammo = ply:GetAmmoCount(wep:GetSecondaryAmmoType())
 		end
 	end
-	
+
 	if primary_ammo >= 0 and PulpHUD_primaryAnim < w then
 		PulpHUD_primaryAnim=PulpHUD_primaryAnim+5
 	elseif primary_ammo == -1 and PulpHUD_primaryAnim > 0 and PulpHUD_secondaryAnim==0 then
 		PulpHUD_primaryAnim=PulpHUD_primaryAnim-5
-	end	
+	end
 	draw.RoundedBox( 8, ScrW()-PulpHUD_primaryAnim-offsetX, ScrH()-h-offsetY, w, h, Color(0, 0, 0, (PulpHUD_primaryAnim/w)*180) );
 	draw.DrawText("Primary", "HealthFont", ScrW()-PulpHUD_primaryAnim-offsetX+10, ScrH()-h-offsetY+10, Color(255, 255, 255, (PulpHUD_primaryAnim/w)*255), TEXT_ALIGN_LEFT);
 	draw.DrawText(primary_ammo, "HealthFont2", ScrW()-PulpHUD_primaryAnim-offsetX+80, ScrH()-h-offsetY+15, Color(255, 255, 255, (PulpHUD_primaryAnim/w)*255), TEXT_ALIGN_LEFT);
 	draw.DrawText(total_ammo, "HealthFont", ScrW()-PulpHUD_primaryAnim-offsetX+w-10, ScrH()-offsetY-30, Color(255, 255, 255, (PulpHUD_primaryAnim/w)*255), TEXT_ALIGN_RIGHT);
-	
+
 	if secondary_ammo > 0 and PulpHUD_secondaryAnim < 50 and PulpHUD_primaryAnim == w then
 		PulpHUD_secondaryAnim=PulpHUD_secondaryAnim+1
 	elseif secondary_ammo <= 0 and PulpHUD_secondaryAnim > 0 then
 		PulpHUD_secondaryAnim=PulpHUD_secondaryAnim-1
-	end	
+	end
 	draw.RoundedBox( 8, ScrW()-w-offsetX, ScrH()-h-offsetY-PulpHUD_secondaryAnim, w/1.5, 40, Color(0, 0, 0, (PulpHUD_secondaryAnim/50)*180) );
 	draw.DrawText("Secondary", "BudgetLabel", ScrW()-w-offsetX+10, ScrH()-h-offsetY+10-PulpHUD_secondaryAnim, Color(255, 255, 255, (PulpHUD_secondaryAnim/50)*255), TEXT_ALIGN_LEFT);
 	draw.DrawText(secondary_ammo, "HealthFont", ScrW()-w-offsetX+80, ScrH()-h-offsetY+10-PulpHUD_secondaryAnim, Color(255, 255, 255, (PulpHUD_secondaryAnim/50)*255), TEXT_ALIGN_LEFT);
@@ -180,8 +180,8 @@ function PulpHUD_Drawer()
 	if PulpHUD_Var_CompassDraw:GetBool() == false then return; end
 	local w = ScrW()/3
 	local h = 30
-	draw.RoundedBox( 8, ScrW()/2-w/2, 100, w, h, Color(0, 0, 0, 180) );	
-	
+	draw.RoundedBox( 8, ScrW()/2-w/2, 100, w, h, Color(0, 0, 0, 180) );
+
 	local finalText = ""
 	local yaw = math.floor(LocalPlayer():GetAngles().y)
 	for i=yaw,yaw+28,1 do
@@ -190,7 +190,7 @@ function PulpHUD_Drawer()
 			y=i-180
 		end
 		finalText = PulpHUD_Compass[y]..finalText
-	end	
+	end
 	for i=yaw-1,yaw-28,-1 do
 		local y=i
 		if i<-180 then
@@ -236,7 +236,7 @@ function PulpHUD_addNotification(text)
 	data[7] = 0 -- vitesse alpha
 	data[8] = 0 -- Timer pour eviter la disparition rapide
 	data[9] = false -- Est apparue ?
-	
+
 	table.insert( PulpHUD_notifs , data );
 end
 
@@ -253,3 +253,5 @@ timer.Simple(1.5, function()
 		PulpHUD_addNotification(Text)
 	end
 end)
+
+print("PulpHUD loaded !")
