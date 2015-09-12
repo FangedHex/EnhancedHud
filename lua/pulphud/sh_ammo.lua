@@ -22,7 +22,7 @@ if CLIENT then
 		local total_ammo = -1
 		local primary_ammo = -1
 		local secondary_ammo = -1
-		if ply:Alive() and wep ~= nil then
+		if ply:Alive() and wep ~= nil and wep:IsWeapon() then
 			if wep.GetPrimaryAmmoType ~= nil then
 				total_ammo = ply:GetAmmoCount(wep:GetPrimaryAmmoType())
 			end
@@ -32,6 +32,19 @@ if CLIENT then
 			if wep.GetSecondaryAmmoType ~= nil then
 				secondary_ammo = ply:GetAmmoCount(wep:GetSecondaryAmmoType())
 			end
+
+			-- Blacklisting some weapon to avoid HUD from showing
+			if wep:GetClass() == "weapon_physcannon" or wep:GetClass() == "weapon_physgun" or wep:GetClass() == "weapon_crowbar" then
+				primary_ammo = -1
+				total_ammo = -1
+			end
+		end
+
+		-- This stuff fix the ammo for RPG and grenade (showing the HUD)
+		local printTotal = true
+		if primary_ammo < 0 and total_ammo >= 0 then
+			primary_ammo = total_ammo
+			printTotal = false
 		end
 
 		if primary_ammo >= 0 and PulpHUD_primaryAnim < w then
@@ -42,7 +55,9 @@ if CLIENT then
 		draw.RoundedBox( 8, ScrW()-PulpHUD_primaryAnim-offsetX, ScrH()-h-offsetY, w, h, Color(0, 0, 0, (PulpHUD_primaryAnim/w)*180) );
 		draw.DrawText("Primary", "HealthFont", ScrW()-PulpHUD_primaryAnim-offsetX+10, ScrH()-h-offsetY+10, Color(255, 255, 255, (PulpHUD_primaryAnim/w)*255), TEXT_ALIGN_LEFT);
 		draw.DrawText(primary_ammo, "HealthFont2", ScrW()-PulpHUD_primaryAnim-offsetX+80, ScrH()-h-offsetY+15, Color(255, 255, 255, (PulpHUD_primaryAnim/w)*255), TEXT_ALIGN_LEFT);
-		draw.DrawText(total_ammo, "HealthFont", ScrW()-PulpHUD_primaryAnim-offsetX+w-10, ScrH()-offsetY-30, Color(255, 255, 255, (PulpHUD_primaryAnim/w)*255), TEXT_ALIGN_RIGHT);
+		if printTotal then
+			draw.DrawText(total_ammo, "HealthFont", ScrW()-PulpHUD_primaryAnim-offsetX+w-10, ScrH()-offsetY-30, Color(255, 255, 255, (PulpHUD_primaryAnim/w)*255), TEXT_ALIGN_RIGHT);
+		end
 
 		if secondary_ammo > 0 and PulpHUD_secondaryAnim < 50 and PulpHUD_primaryAnim == w then
 			PulpHUD_secondaryAnim=PulpHUD_secondaryAnim+1
