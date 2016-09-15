@@ -33,8 +33,8 @@ if CLIENT then
 				secondary_ammo = ply:GetAmmoCount(wep:GetSecondaryAmmoType())
 			end
 
-			-- Blacklisting some weapon to avoid HUD from showing
-			if wep:GetClass() == "weapon_physcannon" or wep:GetClass() == "weapon_physgun" or wep:GetClass() == "weapon_crowbar" then
+			-- Blacklisting some weapon to avoid HUD from showingreload
+			if wep:GetClass() == "weapon_physcannon" or wep:GetClass() == "weapon_physgun" or wep:GetClass() == "weapon_crowbar" or wep:GetClass() == "gmod_tool" then
 				primary_ammo = -1
 				total_ammo = -1
 			end
