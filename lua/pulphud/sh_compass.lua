@@ -37,7 +37,7 @@ if CLIENT then
 		if PulpHUD_Var_CompassDraw:GetBool() == false then return; end
 		local w = ScrW()/3
 		local h = 30
-		draw.RoundedBox( 8, ScrW()/2-w/2, 100, w, h, Color(0, 0, 0, 180) );
+		draw.RoundedBox( 8, ScrW()/2-w/2, 100, w, h, PulpHUD_Color(180) );
 
 		local finalText = ""
 		local yaw = math.floor(LocalPlayer():GetAngles().y)

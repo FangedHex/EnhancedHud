@@ -38,7 +38,7 @@ if CLIENT then
 				local w,h = surface.GetTextSize(data[1]);
 				w = w+32;
 				if data[2] < ScrW() then
-					draw.RoundedBox( 8, data[2], data[3], w, 20, Color(0, 0, 0, data[6]-75) ); -- On dessine la boite
+					draw.RoundedBox( 8, data[2], data[3], w, 20, PulpHUD_Color(data[6]-75) ); -- On dessine la boite
 					draw.DrawText(data[1], "BudgetLabel", data[2]+24, data[3]+4, Color(255, 255, 255, data[6]), TEXT_ALIGN_LEFT); -- On dessine le texte
 					draw.TexturedQuad
 					{
